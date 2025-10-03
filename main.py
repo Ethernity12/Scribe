@@ -16,20 +16,21 @@ class Client(commands.InteractionBot):
     def __init__(self):
         super().__init__(intents=disnake.Intents.all())
         self.cog_list: List[commands.Cog] = [
-            ExampleCog
+            ExampleCog(self)
         ]
+        self.cog_loader()
 
     async def on_ready(self):
-        user = bot.user
+        user = self.user
         main_logger.info("=== Bot Started ===")
         main_logger.info(f"Bot Name: {user}")
         main_logger.info(f"Bot ID: {user.id}")
         main_logger.info(f"Connected guilds: {len(bot.guilds)}")
         main_logger.info("==================")
 
-    async def cog_loader(self):
+    def cog_loader(self):
         for cog in self.cog_list:
-            await self.add_cog(cog)
+            self.add_cog(cog)
             main_logger.info(f"Cog loaded: {cog.__class__.__name__}")
         
 
